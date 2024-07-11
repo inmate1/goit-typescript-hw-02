@@ -1,0 +1,8 @@
+.item {
+  /* grid-area: 1 / 3 / 2 / 4; */
+  /* display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; */
+  height: 250px;
+}
