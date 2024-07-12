@@ -1,39 +1,39 @@
-import { ReactElement } from "react";
-import GridItem from "../GridItem/GridItem";
-import styles from "./ImageCard.module.css";
+import { ReactElement } from 'react';
+import GridItem from '../GridItem/GridItem';
+import styles from './ImageCard.module.css';
+import { Image } from '../apiService/photos-api';
 
 interface ImageCardProps {
-  alt: string;
-  modal: string;
-  src: string;
-  user: string;
-  likes: number;
-  onImageClick: (
-    details: {
+  image: Image;
+  onImageClick: (details: {
     modal: string;
     user: string;
     likes: number;
     alt: string;
-  }
-) => void;
+  }) => void;
 }
 
-
-const ImageCard = ({
-  alt,
-  modal,
-  src,
-  user,
-  likes,
-  onImageClick,
-}: ImageCardProps): ReactElement => {
+const ImageCard = ({ image, onImageClick }: ImageCardProps): ReactElement => {
+  const {
+    alt_description,
+    urls: { regular, small },
+    user,
+    likes,
+  } = image;
   return (
     <GridItem>
       <div className={styles.thumb}>
         <img
-          src={src}
-          alt={alt}
-          onClick={() => onImageClick({ modal, user, likes, alt })}
+          src={small}
+          alt={alt_description}
+          onClick={() =>
+            onImageClick({
+              modal: regular,
+              user: user.name,
+              likes,
+              alt: alt_description,
+            })
+          }
           style={{ cursor: 'pointer' }}
         />
       </div>

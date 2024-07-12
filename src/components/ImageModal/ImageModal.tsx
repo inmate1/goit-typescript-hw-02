@@ -1,6 +1,7 @@
 import Modal, { Styles } from 'react-modal';
 import css from './ImageModal.module.css';
 import { ReactElement } from 'react';
+import { Image } from '../apiService/photos-api';
 
 const customStyles: Styles = {
   content: {
@@ -22,14 +23,12 @@ const customStyles: Styles = {
 
 Modal.setAppElement('#root');
 
-interface ImageModal {
+interface ImageModalProps {
   imageSrc: {
-    alt: string;
     modal: string;
-    user: {
-      name: string;
-    };
+    user: string;
     likes: number;
+    alt: string;
   } | null;
   onClose: () => void;
   isOpen: boolean;
@@ -39,7 +38,7 @@ const ImageModal = ({
   imageSrc,
   onClose,
   isOpen,
-}: ImageModal): ReactElement => {
+}: ImageModalProps): ReactElement => {
   const afterOpenModal = () => {
     document.body.style.overflow = 'hidden';
   };
@@ -55,22 +54,18 @@ const ImageModal = ({
       shouldCloseOnOverlayClick={true} // Close on click outside
       shouldCloseOnEsc={true} // Close on ESC key press
     >
-      {imageSrc?.modal && (
+      {imageSrc && (
         <>
           <div>
             <img
-              src={imageSrc && imageSrc.modal}
-              alt='Full Size'
+              src={imageSrc.modal}
+              alt={imageSrc.alt}
               style={{ width: '1200px', height: '700px' }}
             />
           </div>
-          <p className={css.descModal}>
-            Description: {imageSrc && imageSrc.alt}
-          </p>
-          <p className={css.descModal}>
-            Author:{imageSrc && imageSrc.user.name}
-          </p>
-          <p className={css.descModal}>Likes: {imageSrc && imageSrc.likes}</p>
+          <p className={css.descModal}>Description: {imageSrc.alt}</p>
+          <p className={css.descModal}>Author: {imageSrc.user}</p>
+          <p className={css.descModal}>Likes: {imageSrc.likes}</p>
         </>
       )}
     </Modal>

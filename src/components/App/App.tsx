@@ -8,27 +8,30 @@ import ImageGallery from '../ImageGallery/ImageGallery';
 import Loader from '../Loader/Loader';
 import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
 import ImageModal from '../ImageModal/ImageModal';
-import fetchImages from '../apiService/photos-api';
+import fetchImages, { FetchImagesResponse, Image } from '../apiService/photos-api';
 
 const App = () => {
-  const [images, setImages] = useState([]);
-  const [searchPage, setSearchPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [showBtn, setShowBtn] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [images, setImages] = useState<Image[]>([]);
+  const [searchPage, setSearchPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [showBtn, setShowBtn] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<{
+    modal: string;
+    user: string;
+    likes: number;
+    alt: string;
+  } | null>(null);
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
   useEffect(() => {
     if (!searchQuery) return;
     async function fetchData() {
       setIsLoading(true);
       try {
-        const { total, total_pages, results } = await fetchImages(
-          searchQuery,
-          searchPage
-        );
+        const { total, total_pages, results }: FetchImagesResponse =
+          await fetchImages(searchQuery, searchPage);
         if (total === 0) {
           toast.error('There are no images matching your request!');
         }
@@ -54,7 +57,7 @@ const App = () => {
     }
   }, [isLoading, images, searchPage]);
 
-  const handleSearchBar = searchValue => {
+  const handleSearchBar = (searchValue: string) => {
     setSearchPage(1);
     setImages([]);
     setError(null);
@@ -65,7 +68,13 @@ const App = () => {
     setSearchPage(prevPage => prevPage + 1);
   };
 
-  const handleImageClick = imageSrc => {
+  const handleImageClick = (imageSrc: {
+    modal: string;
+    user: string;
+    likes: number;
+    alt: string;
+  }) => {
+
     setSelectedImage(imageSrc);
     setIsOpenModal(true);
   };
