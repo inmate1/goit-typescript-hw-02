@@ -41,8 +41,7 @@ const fetchImages = async (
 
     return response.data;
   } catch (error) {
-     console.error('Error fetching images:', error);
-     throw new Error(error.response?.data?.message || 'Failed to fetch images');
+  throw new Error('Failed to fetch gallery');
   }
 };
 
